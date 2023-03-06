@@ -1,0 +1,58 @@
+import solver_funcs
+
+
+def get_cages():
+    cages = []
+    cage1 = 0
+    value = 0
+    cage_total = int(input("Number of cages: "))
+    while value < cage_total:
+        cage1 = input("Cage number " + str(value) + ": ")
+        x = cage1.split()
+        map_cage = map(int, x)
+        int_cage = list(map_cage)
+        cages.append(int_cage)
+        value += 1
+    return cages
+
+
+def main():
+    cages = get_cages()
+    checks = 0
+    backtracks = 0
+    rows = 0
+    columns = 0
+
+    puzzle = [[0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0]]
+    while rows < 5:
+        puzzle[rows][columns] += 1
+        checks += 1
+        if solver_funcs.check_valid(puzzle, cages) is True:
+            if columns < 4:
+                columns += 1
+            elif columns == 4:
+                rows += 1
+                columns = 0
+        else:
+            while puzzle[rows][columns] == 5:
+                puzzle[rows][columns] = 0
+                if columns > 0:
+                    columns -= 1
+                elif columns == 0 and rows > 0:
+                    columns = 4
+                    rows -= 1
+                backtracks += 1
+    print("\n--Solution--\n")
+    puzzle2 = '\n'.join(
+        ''.join([str(row) + ' ' for row in column])
+        for column in puzzle)
+    print(puzzle2)
+    print("\nchecks: ", checks, "backtracks: ", backtracks)
+
+
+if __name__ == '__main__':
+    main()
