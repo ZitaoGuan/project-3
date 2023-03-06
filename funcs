@@ -1,0 +1,68 @@
+def check_valid(puzzle, cages):
+    return check_cages_valid(puzzle, cages) and \
+           check_columns_valid(puzzle) and \
+           check_rows_valid(puzzle)
+
+
+def check_cages_valid(puzzle, cages):
+    for index in range(len(cages)):
+        if not check_cage_valid(puzzle, cages[index]):
+            return False
+    return True
+
+
+def check_cage_valid(puzzle, cage):
+    number = 0
+    is_zero = False
+
+    for value in range(2, len(cage)):
+        number += puzzle[cage[value] // 5][cage[value] % 5]
+        if puzzle[cage[value] // 5][cage[value] % 5] == 0:
+            is_zero = True
+    if is_zero is True:
+        if cage[0] > number:
+            return True
+        elif cage[0] <= number:
+            return False
+    else:
+        return number == cage[0]
+
+
+def check_columns_valid2(puzzle, columns0):
+    columns = []
+    for row in range(len(puzzle)):
+        if puzzle[row][columns0] in columns:
+            if puzzle[row][columns0] == 0:
+                columns.append(puzzle[row][columns0])
+            else:
+                return False
+        else:
+            columns.append(puzzle[row][columns0])
+    return True
+
+
+def check_columns_valid(puzzle):
+    for index in range(len(puzzle)):
+        if not check_columns_valid2(puzzle, index):
+            return False
+    return True
+
+
+def check_rows_valid2(puzzle, rows0):
+    rows = []
+    for column in range(len(puzzle)):
+        if puzzle[rows0][column] in rows:
+            if puzzle[rows0][column] == 0:
+                rows.append(puzzle[rows0][column])
+            else:
+                return False
+        else:
+            rows.append(puzzle[rows0][column])
+    return True
+
+
+def check_rows_valid(puzzle):
+    for index in range(len(puzzle)):
+        if not check_rows_valid2(puzzle, index):
+            return False
+    return True
